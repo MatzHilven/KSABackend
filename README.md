@@ -7,4 +7,5 @@
 - [ ] Add Users API
 - [ ] Add Activities API
 - [ ] Add Events API
+- [ ] Add Analytics API
 - [ ] Add Images API
