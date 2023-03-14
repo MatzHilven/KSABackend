@@ -1,5 +1,6 @@
 use actix_cors::Cors;
-use actix_web::{App, HttpServer, middleware::Logger, web::Data};
+use actix_web::{App, HttpServer, middleware::Logger};
+use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
 mod api;
 mod models;
@@ -10,6 +11,12 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "debug");
     std::env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
+
+    let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    builder
+        .set_private_key_file("key.pem", SslFiletype::PEM)
+        .unwrap();
+    builder.set_certificate_chain_file("cert.pem").unwrap();
 
     HttpServer::new(move || {
         let logger = Logger::default();
@@ -25,7 +32,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(logger)
             .wrap(cors)
     })
-        .bind(("0.0.0.0", 80))?
+        .bind_openssl("127.0.0.1:8443", builder)?
         .run()
         .await
 }
