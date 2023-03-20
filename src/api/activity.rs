@@ -15,7 +15,7 @@ pub async fn alive() -> HttpResponse {
     HttpResponse::Ok().json("alive")
 }
 
-#[get("/activities")]
+#[get("/activity")]
 pub async fn get_activities() -> HttpResponse {
     use crate::schema::activities::dsl::*;
 
@@ -28,7 +28,7 @@ pub async fn get_activities() -> HttpResponse {
     HttpResponse::Ok().json(results)
 }
 
-#[get("/activities/{id}")]
+#[get("/activity/{id}")]
 pub async fn get_activity(path_id: Path<i32>) -> HttpResponse {
     use crate::schema::activities::dsl::*;
 
@@ -42,7 +42,7 @@ pub async fn get_activity(path_id: Path<i32>) -> HttpResponse {
     }
 }
 
-#[post("/activities")]
+#[post("/activity")]
 pub async fn add_activity(activity: Json<Activity>) -> HttpResponse {
     use crate::schema::activities::dsl::*;
 

@@ -5,7 +5,7 @@ use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware::Logger};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
-use crate::api::api::{alive, add_activity, get_activities, get_activity};
+use crate::api::activity::{alive, add_activity, get_activities, get_activity};
 
 mod db;
 mod schema;
