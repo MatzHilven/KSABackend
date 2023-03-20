@@ -10,3 +10,4 @@
 - [ ] Add Events API
 - [ ] Add Analytics API
 - [ ] Add Images API
+- [ ] Add diesel cli to Dockerfile
