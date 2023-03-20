@@ -42,7 +42,7 @@ async fn main() -> std::io::Result<()> {
             .service(add_activity)
             .service(get_activities)
     })
-        .bind_openssl("127.0.0.1:8443", builder)?
+        .bind_openssl("127.0.0.1:443", builder)?
         .run()
         .await
 }
