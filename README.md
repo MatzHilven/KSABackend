@@ -11,3 +11,5 @@
 - [ ] Add Analytics API
 - [ ] Add Images API
 - [ ] Add diesel cli to Dockerfile
+- [ ] Add Webshop API
+- [ ] Add Forms API (registrations)
