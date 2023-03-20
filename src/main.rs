@@ -5,7 +5,7 @@ use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware::Logger};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
-use crate::api::api::{alive, add_activity, get_activities};
+use crate::api::api::{alive, add_activity, get_activities, get_activity};
 
 mod db;
 mod schema;
@@ -41,6 +41,7 @@ async fn main() -> std::io::Result<()> {
             .service(alive)
             .service(add_activity)
             .service(get_activities)
+            .service(get_activity)
     })
         .bind_openssl("127.0.0.1:443", builder)?
         .run()

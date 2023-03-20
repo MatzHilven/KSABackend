@@ -3,6 +3,7 @@ use actix_web::{
     post,
     HttpResponse,
     web::Json,
+    web::Path,
 };
 
 use crate::models::activity::{Activity, NewActivity};
@@ -25,6 +26,20 @@ pub async fn get_activities() -> HttpResponse {
         .expect("Error loading activities");
 
     HttpResponse::Ok().json(results)
+}
+
+#[get("/activities/{id}")]
+pub async fn get_activity(path_id: Path<i32>) -> HttpResponse {
+    use crate::schema::activities::dsl::*;
+
+    let mut connection = establish_connection();
+
+    match activities
+        .filter(id.eq(path_id.into_inner()))
+        .load::<Activity>(&mut connection) {
+        Ok(res) => HttpResponse::Ok().json(res),
+        Err(_) => HttpResponse::NotFound().json("Activity not found."),
+    }
 }
 
 #[post("/activities")]
