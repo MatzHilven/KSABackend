@@ -335,6 +335,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d261e256854913907f67ed06efbc3338dfe6179796deefc1ff763fc1aee5535"
 
 [[package]]
+name = "byteorder"
+version = "1.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14c189c53d098945499cdfa7ecc63567cf3886b3332b312a5b4585d8d3a6a610"
+
+[[package]]
 name = "bytes"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -374,6 +380,7 @@ dependencies = [
  "js-sys",
  "num-integer",
  "num-traits",
+ "serde",
  "time 0.1.45",
  "wasm-bindgen",
  "winapi",
@@ -494,6 +501,32 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustc_version",
+ "syn",
+]
+
+[[package]]
+name = "diesel"
+version = "2.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4391a22b19c916e50bec4d6140f29bdda3e3bb187223fe6e3ea0b6e4d1021c04"
+dependencies = [
+ "bitflags",
+ "byteorder",
+ "chrono",
+ "diesel_derives",
+ "itoa",
+ "pq-sys",
+]
+
+[[package]]
+name = "diesel_derives"
+version = "2.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ad74fdcf086be3d4fdd142f67937678fe60ed431c3b2f08599e7687269410c4"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
  "syn",
 ]
 
@@ -873,6 +906,7 @@ dependencies = [
  "actix-web",
  "chrono",
  "derive_more",
+ "diesel",
  "dotenv",
  "env_logger",
  "futures",
@@ -1110,6 +1144,39 @@ name = "ppv-lite86"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
+
+[[package]]
+name = "pq-sys"
+version = "0.4.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3b845d6d8ec554f972a2c5298aad68953fd64e7441e846075450b44656a016d1"
+dependencies = [
+ "vcpkg",
+]
+
+[[package]]
+name = "proc-macro-error"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c"
+dependencies = [
+ "proc-macro-error-attr",
+ "proc-macro2",
+ "quote",
+ "syn",
+ "version_check",
+]
+
+[[package]]
+name = "proc-macro-error-attr"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1be40180e52ecc98ad80b184934baf3d0d29f979574e439af5a55274b35f869"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "version_check",
+]
 
 [[package]]
 name = "proc-macro2"

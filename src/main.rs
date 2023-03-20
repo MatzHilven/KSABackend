@@ -1,7 +1,14 @@
+extern crate diesel;
+extern crate dotenv;
+
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware::Logger};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
+use crate::api::api::{alive, add_activity, get_activities};
+
+mod db;
+mod schema;
 mod api;
 mod models;
 mod repository;
@@ -31,6 +38,9 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(logger)
             .wrap(cors)
+            .service(alive)
+            .service(add_activity)
+            .service(get_activities)
     })
         .bind_openssl("127.0.0.1:8443", builder)?
         .run()

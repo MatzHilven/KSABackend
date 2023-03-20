@@ -9,10 +9,11 @@ edition = "2021"
 actix-web = { version = "4.2.1", features = ["openssl"] }
 openssl = { version = "0.10", features = ["v110"] }
 serde = { version = "1.0.130", features = ["derive"] }
+diesel = { version = "2.0.0", features = ["postgres", "chrono"] }
 env_logger = "0.10.0"
 log = "0.4.14"
 derive_more = "0.99.17"
 dotenv = "0.15.0"
 futures = "0.3.25"
-chrono = "0.4.23"
+chrono = { version = "0.4.23", features = ["serde"] }
 actix-cors = "0.6.4"
