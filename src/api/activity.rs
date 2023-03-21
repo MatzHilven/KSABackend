@@ -6,7 +6,7 @@ use actix_web::{
     web::Path,
 };
 
-use crate::models::activity::{Activity, NewActivity};
+use crate::models::activity::{Activity, ActivityInput, NewActivity};
 use crate::db::db::establish_connection;
 use diesel::prelude::*;
 
@@ -43,7 +43,7 @@ pub async fn get_activity(path_id: Path<i32>) -> HttpResponse {
 }
 
 #[post("/activity")]
-pub async fn add_activity(activity: Json<Activity>) -> HttpResponse {
+pub async fn add_activity(activity: Json<ActivityInput>) -> HttpResponse {
     use crate::schema::activities::dsl::*;
 
     let mut connection = establish_connection();
