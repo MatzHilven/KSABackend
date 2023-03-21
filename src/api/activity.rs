@@ -6,14 +6,10 @@ use actix_web::{
     web::Path,
 };
 
-use crate::models::activity::{Activity, ActivityInput, NewActivity};
 use crate::db::db::establish_connection;
-use diesel::prelude::*;
+use crate::models::activity::{Activity, ActivityInput, NewActivity};
 
-#[get("/")]
-pub async fn alive() -> HttpResponse {
-    HttpResponse::Ok().json("alive")
-}
+use diesel::prelude::*;
 
 #[get("/activity")]
 pub async fn get_activities() -> HttpResponse {

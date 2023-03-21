@@ -14,7 +14,7 @@ pub struct Activity {
     pub extra: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct ActivityInput {
     pub ban: String,
     pub start_date: NaiveDateTime,
