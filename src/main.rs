@@ -2,7 +2,10 @@ extern crate diesel;
 extern crate dotenv;
 
 use actix_cors::Cors;
-use actix_web::{App, HttpResponse, HttpServer, middleware::Logger, http};
+use actix_web::{App, HttpResponse, HttpServer, middleware::Logger, http, Error};
+use actix_web::dev::ServiceRequest;
+use actix_web::error::ErrorUnauthorized;
+use actix_web_httpauth::{extractors::basic::BasicAuth, middleware::HttpAuthentication};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
 use crate::api::activity::{add_activity, get_activities, get_activity};
@@ -13,6 +16,14 @@ mod schema;
 mod api;
 mod models;
 mod repository;
+
+async fn validator(req: ServiceRequest, credentials: BasicAuth, ) -> Result<ServiceRequest, (Error, ServiceRequest)> {
+    if credentials.password() == Option::from("password") {
+        return Ok(req);
+    }
+
+    Err((ErrorUnauthorized("Invalid credentials"), req))
+}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -29,6 +40,8 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let logger = Logger::default();
 
+        let auth = HttpAuthentication::basic(validator);
+
         let cors = Cors::default()
             .allow_any_origin()
             .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
@@ -38,6 +51,7 @@ async fn main() -> std::io::Result<()> {
 
         App::new()
             .wrap(logger)
+            .wrap(auth)
             .wrap(cors)
             .route("/", actix_web::web::to(|| async { HttpResponse::Ok().body("alive") }))
             .service(add_activity)
