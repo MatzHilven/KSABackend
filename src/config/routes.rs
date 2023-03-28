@@ -19,7 +19,8 @@ pub fn config_services(cfg: &mut web::ServiceConfig) {
             //         )
             //         .service(
             //             web::resource("/logout").route(web::post().to(auth_controller::logout)),
-            //         ),
+            //         )
+            // )
             .service(
                 web::scope("/activity")
                     .service(
@@ -34,19 +35,19 @@ pub fn config_services(cfg: &mut web::ServiceConfig) {
                         .route(web::delete().to(activity_controller::delete))
                 )
             )
-        // .service(
-        //     web::scope("/event")
-        //         .service(
-        //             web::resource("")
-        //                 .route(web::get().to(event_controller::get_events))
-        //                 .route(web::post().to(event_controller::add_event)),
-        //         )
-        //         .service(
-        //             web::resource("/{id}")
-        //                 .route(web::get().to(event_controller::get_event))
-        //                 .route(web::put().to(event_controller::edit_event))
-        //                 .route(web::delete().to(event_controller::delete_event))
-        //         )
-        // )
+        .service(
+            web::scope("/event")
+                .service(
+                    web::resource("")
+                        .route(web::get().to(event_controller::find_all))
+                        .route(web::post().to(event_controller::insert)),
+                )
+                .service(
+                    web::resource("/{id}")
+                        .route(web::get().to(event_controller::find_by_id))
+                        .route(web::put().to(event_controller::update))
+                        .route(web::delete().to(event_controller::delete))
+                )
+        )
     );
 }

@@ -25,7 +25,7 @@ pub async fn find_by_id(id: web::Path<i32>, pool: web::Data<Pool>) -> Result<Htt
     }
 }
 
-// POST api/activity/
+// POST api/activity
 pub async fn insert(activity: web::Json<NewActivity>, pool: web::Data<Pool>) -> Result<HttpResponse> {
     match activity_service::insert(activity.0, &pool) {
         Ok(()) => Ok(HttpResponse::Created()
