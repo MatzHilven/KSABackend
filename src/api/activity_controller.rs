@@ -3,6 +3,7 @@ use actix_web::{web, HttpResponse, Result};
 use crate::{
     config::db::Pool,
     constants,
+    models::activity::{NewActivity},
     models::response::ResponseBody,
     services::activity_service
 };
@@ -15,58 +16,42 @@ pub async fn find_all(pool: web::Data<Pool>) -> Result<HttpResponse> {
         Err(err) => Ok(err.response())
     }
 }
-//
-// // GET api/activity/{id}
-// pub async fn get_activity(path_id: Path<i32>) -> HttpResponse {
-//     use crate::schema::activities::dsl::*;
-//
-//
-//     match activities
-//         .filter(id.eq(path_id.into_inner()))
-//         .load::<Activity>(&mut connection) {
-//         Ok(res) => HttpResponse::Ok().json(res),
-//         Err(_) => HttpResponse::NotFound().json("Activity not found."),
-//     }
-// }
-//
-// // PUT api/activity/{id}
-// pub async fn edit_activity(path_id: Path<i32>, activity: Json<ActivityInput>) -> HttpResponse {
-//     use crate::schema::activities::dsl::*;
-//
-//
-//     let new_activity = NewActivity {
-//         ban: activity.ban.as_str(),
-//         start_date: activity.start_date,
-//         end_date: activity.end_date,
-//         description: activity.description.as_str(),
-//         extra: activity.extra.as_deref(),
-//     };
-//
-//     match diesel::update(activities.filter(id.eq(path_id.into_inner())))
-//         .set(&new_activity)
-//         .execute(&mut connection) {
-//         Ok(_) => HttpResponse::Ok().json("Successfully updated activity."),
-//         Err(err) => HttpResponse::InternalServerError().json( err.to_string()),
-//     }
-// }
-//
-// // POST api/activity/
-// pub async fn add_activity(activity: Json<ActivityInput>) -> HttpResponse {
-//     use crate::schema::activities::dsl::*;
-//
-//
-//     let new_activity = NewActivity {
-//         ban: activity.ban.as_str(),
-//         start_date: activity.start_date,
-//         end_date: activity.end_date,
-//         description: activity.description.as_str(),
-//         extra: activity.extra.as_deref(),
-//     };
-//
-//     match diesel::insert_into(activities)
-//         .values(&new_activity)
-//         .execute(&mut connection) {
-//         Ok(_) => HttpResponse::Created().json("Successfully added activity."),
-//         Err(err) => HttpResponse::InternalServerError().json( err.to_string()),
-//     }
-// }
+
+// GET api/activity/{id}
+pub async fn find_by_id(id: web::Path<i32>, pool: web::Data<Pool>) -> Result<HttpResponse> {
+    match activity_service::find_by_id(id.into_inner(), &pool) {
+        Ok(activity) => Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, activity))),
+        Err(err) => Ok(err.response()),
+    }
+}
+
+// POST api/activity/
+pub async fn insert(activity: web::Json<NewActivity>, pool: web::Data<Pool>) -> Result<HttpResponse> {
+    match activity_service::insert(activity.0, &pool) {
+        Ok(()) => Ok(HttpResponse::Created()
+            .json(ResponseBody::new(constants::MESSAGE_OK, constants::EMPTY))),
+        Err(err) => Ok(err.response()),
+    }
+}
+
+
+// PUT api/activity/{id}
+pub async fn update(id: web::Path<i32>, activity: web::Json<NewActivity>, pool: web::Data<Pool>) -> Result<HttpResponse> {
+    match activity_service::update(id.into_inner(), activity.0, &pool) {
+        Ok(()) => {
+            Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, constants::EMPTY)))
+        }
+        Err(err) => Ok(err.response()),
+    }
+}
+
+
+// DELETE api/activity/{id}
+pub async fn delete(id: web::Path<i32>, pool: web::Data<Pool>) -> Result<HttpResponse> {
+    match activity_service::delete(id.into_inner(), &pool) {
+        Ok(()) => {
+            Ok(HttpResponse::Ok().json(ResponseBody::new(constants::MESSAGE_OK, constants::EMPTY)))
+        }
+        Err(err) => Ok(err.response()),
+    }
+}

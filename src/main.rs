@@ -6,6 +6,7 @@ extern crate serde;
 
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, middleware::Logger, http};
+use actix_web::web::Data;
 use dotenv::dotenv;
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
@@ -47,7 +48,7 @@ async fn main() -> std::io::Result<()> {
 
         App::new()
             .wrap(cors)
-            // .app_data(pool.clone())
+            .app_data(Data::new(pool.clone()))
             .wrap(logger)
             // .wrap(crate::middleware::auth_middleware::Authentication)
             .configure(config::routes::config_services)
