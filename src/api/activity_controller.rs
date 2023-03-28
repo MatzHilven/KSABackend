@@ -34,7 +34,6 @@ pub async fn insert(activity: web::Json<NewActivity>, pool: web::Data<Pool>) -> 
     }
 }
 
-
 // PUT api/activity/{id}
 pub async fn update(id: web::Path<i32>, activity: web::Json<NewActivity>, pool: web::Data<Pool>) -> Result<HttpResponse> {
     match activity_service::update(id.into_inner(), activity.0, &pool) {
@@ -44,7 +43,6 @@ pub async fn update(id: web::Path<i32>, activity: web::Json<NewActivity>, pool: 
         Err(err) => Ok(err.response()),
     }
 }
-
 
 // DELETE api/activity/{id}
 pub async fn delete(id: web::Path<i32>, pool: web::Data<Pool>) -> Result<HttpResponse> {
