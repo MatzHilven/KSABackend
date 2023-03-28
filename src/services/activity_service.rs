@@ -2,7 +2,7 @@ use crate::{
     config::db::Pool,
     constants,
     error::ServiceError,
-    models::activity::{Activity, NewActivity},
+    models::activity::{Activity, ActivityDTO},
 };
 use actix_web::{http::StatusCode, web};
 
@@ -26,7 +26,7 @@ pub fn find_by_id(id: i32, pool: &web::Data<Pool>) -> Result<Activity, ServiceEr
     }
 }
 
-pub fn insert(new_activity: NewActivity, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
+pub fn insert(new_activity: ActivityDTO, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
     match Activity::insert(new_activity, &mut pool.get().unwrap()) {
         Ok(_) => Ok(()),
         Err(_) => Err(ServiceError::new(
@@ -36,7 +36,7 @@ pub fn insert(new_activity: NewActivity, pool: &web::Data<Pool>) -> Result<(), S
     }
 }
 
-pub fn update(id: i32, updated_activity: NewActivity, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
+pub fn update(id: i32, updated_activity: ActivityDTO, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
     match Activity::find_by_id(id, &mut pool.get().unwrap()) {
         Ok(_) => match Activity::update(id, updated_activity, &mut pool.get().unwrap()) {
             Ok(_) => Ok(()),

@@ -2,7 +2,7 @@ use crate::{
     config::db::Pool,
     constants,
     error::ServiceError,
-    models::event::{Event, NewEvent},
+    models::event::{Event, EventDTO},
 };
 use actix_web::{http::StatusCode, web};
 
@@ -26,7 +26,7 @@ pub fn find_by_id(id: i32, pool: &web::Data<Pool>) -> Result<Event, ServiceError
     }
 }
 
-pub fn insert(new_event: NewEvent, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
+pub fn insert(new_event: EventDTO, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
     match Event::insert(new_event, &mut pool.get().unwrap()) {
         Ok(_) => Ok(()),
         Err(_) => Err(ServiceError::new(
@@ -36,7 +36,7 @@ pub fn insert(new_event: NewEvent, pool: &web::Data<Pool>) -> Result<(), Service
     }
 }
 
-pub fn update(id: i32, updated_event: NewEvent, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
+pub fn update(id: i32, updated_event: EventDTO, pool: &web::Data<Pool>) -> Result<(), ServiceError> {
     match Event::find_by_id(id, &mut pool.get().unwrap()) {
         Ok(_) => match Event::update(id, updated_event, &mut pool.get().unwrap()) {
             Ok(_) => Ok(()),

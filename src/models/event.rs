@@ -20,7 +20,7 @@ pub struct Event {
 
 #[derive(Insertable, AsChangeset, Serialize, Deserialize)]
 #[diesel(table_name = events)]
-pub struct NewEvent {
+pub struct EventDTO {
     pub name: String,
     pub image_url: String,
     pub location: String,
@@ -38,13 +38,13 @@ impl Event {
         events.find(i).get_result::<Event>(connection)
     }
 
-    pub fn insert(new_event: NewEvent, connection: &mut Connection) -> QueryResult<usize> {
+    pub fn insert(new_event: EventDTO, connection: &mut Connection) -> QueryResult<usize> {
         diesel::insert_into(events)
             .values(&new_event)
             .execute(connection)
     }
 
-    pub fn update(i: i32, new_event: NewEvent, connection: &mut Connection) -> QueryResult<usize> {
+    pub fn update(i: i32, new_event: EventDTO, connection: &mut Connection) -> QueryResult<usize> {
         diesel::update(events.find(i))
             .set(&new_event)
             .execute(connection)

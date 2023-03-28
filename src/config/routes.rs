@@ -6,21 +6,21 @@ pub fn config_services(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("")
             .service(
-                web::resource("/")
+                web::resource("/status")
                     .route(web::get().to(|| async { HttpResponse::Ok().body("alive") })),
             )
-            // .service(
-            //     web::scope("/auth")
-            //         .service(
-            //             web::resource("/signup").route(web::post().to(auth_controller::signup)),
-            //         )
-            //         .service(
-            //             web::resource("/login").route(web::post().to(auth_controller::login)),
-            //         )
-            //         .service(
-            //             web::resource("/logout").route(web::post().to(auth_controller::logout)),
-            //         )
-            // )
+            .service(
+                web::scope("/auth")
+                    .service(
+                        web::resource("/signup").route(web::post().to(user_controller::signup)),
+                    )
+                    .service(
+                        web::resource("/login").route(web::post().to(user_controller::login)),
+                    )
+                    .service(
+                        web::resource("/logout").route(web::post().to(user_controller::logout)),
+                    )
+            )
             .service(
                 web::scope("/activity")
                     .service(

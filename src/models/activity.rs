@@ -19,7 +19,7 @@ pub struct Activity {
 
 #[derive(Insertable, AsChangeset, Serialize, Deserialize)]
 #[diesel(table_name = activities)]
-pub struct NewActivity {
+pub struct ActivityDTO {
     pub ban: String,
     pub start_date: NaiveDateTime,
     pub end_date: NaiveDateTime,
@@ -36,13 +36,13 @@ impl Activity {
         activities.find(i).get_result::<Activity>(connection)
     }
 
-    pub fn insert(new_activity: NewActivity, connection: &mut Connection) -> QueryResult<usize> {
+    pub fn insert(new_activity: ActivityDTO, connection: &mut Connection) -> QueryResult<usize> {
         diesel::insert_into(activities)
             .values(&new_activity)
             .execute(connection)
     }
 
-    pub fn update(i: i32, new_activity: NewActivity, connection: &mut Connection) -> QueryResult<usize> {
+    pub fn update(i: i32, new_activity: ActivityDTO, connection: &mut Connection) -> QueryResult<usize> {
         diesel::update(activities.find(i))
             .set(&new_activity)
             .execute(connection)
