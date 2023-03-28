@@ -2,19 +2,23 @@
 name = "ksabackend"
 version = "0.1.0"
 edition = "2021"
+authors = ["Matz Hilven"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+actix-cors = "0.6.4"
+actix-rt = "2.8.0"
+actix-service = "2.0.2"
 actix-web = { version = "4.2.1", features = ["openssl"] }
+bcrypt = "0.14.0"
+chrono = { version = "0.4.23", features = ["serde"] }
+derive_more = "0.99.17"
+diesel = { version = "2.0.0", features = ["postgres", "chrono", "r2d2"] }
+dotenv = "0.15.0"
+env_logger = "0.10.0"
+futures = "0.3.25"
+jsonwebtoken = "8.3.0"
+log = "0.4.14"
 openssl = { version = "0.10", features = ["v110"] }
 serde = { version = "1.0.130", features = ["derive"] }
-diesel = { version = "2.0.0", features = ["postgres", "chrono"] }
-env_logger = "0.10.0"
-log = "0.4.14"
-derive_more = "0.99.17"
-dotenv = "0.15.0"
-futures = "0.3.25"
-chrono = { version = "0.4.23", features = ["serde"] }
-actix-cors = "0.6.4"
-actix-web-httpauth = "0.8.0"
