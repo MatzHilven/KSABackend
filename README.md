@@ -38,9 +38,9 @@ cargo run
 ## TODO
 
 - [x] Add TLS Support & Https/2
-- [ ] Add Authentication & Authorization
+- [x] Add Authentication & Authorization
 - [x] Add Diesel ORM & Create Database Schema using Postgres
-- [ ] Add Users API
+- [x] Add Users API
 - [x] Add Activities API
 - [x] Add Events API
 - [ ] Add Analytics API
