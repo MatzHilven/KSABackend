@@ -1,3 +1,5 @@
+use crate::http::Method;
+
 // Messages
 pub const MESSAGE_OK: &str = "ok";
 pub const MESSAGE_CAN_NOT_FETCH_DATA: &str = "Can not fetch data";
@@ -23,5 +25,11 @@ pub const AUTHORIZATION: &str = "Authorization";
 // Misc
 pub const EMPTY: &str = "";
 
-// ignore routes
-pub const IGNORE_ROUTES: [&str; 3] = ["/status", "/auth/signup", "/auth/login"];
+// Ignore routes
+pub const IGNORE_ROUTES: [(Method, &str); 5] = [
+    (Method::GET, "/status"),
+    (Method::GET, "/auth/signup"),
+    (Method::GET, "/auth/login"),
+    (Method::GET, "/event"),
+    (Method::GET, "/activity"),
+];

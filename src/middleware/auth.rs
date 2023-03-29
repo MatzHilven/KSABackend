@@ -60,11 +60,12 @@ impl<S, B> Service<ServiceRequest> for AuthenticationMiddleware<S>
             header::CONTENT_LENGTH,
             header::HeaderValue::from_static("true"),
         );
+
         if Method::OPTIONS == *req.method() {
             authenticate_pass = true;
         } else {
             for ignore_route in constants::IGNORE_ROUTES.iter() {
-                if req.path().starts_with(ignore_route) {
+                if req.method() == ignore_route.0 && req.path().starts_with(ignore_route.1) {
                     authenticate_pass = true;
                     break;
                 }
