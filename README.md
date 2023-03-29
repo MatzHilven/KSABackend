@@ -44,7 +44,9 @@ cargo run
 - [x] Add Activities API
 - [x] Add Events API
 - [ ] Add Analytics API
-- [ ] Add Images API
-- [ ] Add diesel cli to Dockerfile
+- [ ] Add Tests
+- [ ] Add User Roles
 - [ ] Add Webshop API
 - [ ] Add Forms API (registrations)
+- [ ] Add Images API
+- [ ] Fix Dockerfile
