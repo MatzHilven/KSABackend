@@ -1,10 +1,10 @@
 use actix_web::{HttpResponse, web};
 
-use crate::api::*;
+use crate::controllers::*;
 
 pub fn config_services(cfg: &mut web::ServiceConfig) {
     cfg.service(
-        web::scope("")
+        web::scope("/api")
             .service(
                 web::resource("/status")
                     .route(web::get().to(|| async { HttpResponse::Ok().body("alive") })),
@@ -20,6 +20,9 @@ pub fn config_services(cfg: &mut web::ServiceConfig) {
                     .service(
                         web::resource("/logout").route(web::post().to(user_controller::logout)),
                     )
+                    .service(
+                        web::resource("/info").route(web::get().to(user_controller::info)),
+                    ),
             )
             .service(
                 web::scope("/activity")

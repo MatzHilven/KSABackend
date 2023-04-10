@@ -7,7 +7,7 @@ use diesel::prelude::*;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Queryable, Serialize, Deserialize)]
+#[derive(Queryable, Serialize, Deserialize)]
 pub struct Activity {
     pub id: i32,
     pub ban: String,

@@ -1,5 +1,11 @@
 // @generated automatically by Diesel CLI.
 
+pub mod sql_types {
+    #[derive(diesel::sql_types::SqlType)]
+    #[diesel(postgres_type(name = "role"))]
+    pub struct Role;
+}
+
 diesel::table! {
     activities (id) {
         id -> Int4,
@@ -32,12 +38,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::Role;
+
     users (id) {
         id -> Int4,
-        username -> Varchar,
-        email -> Varchar,
-        password -> Varchar,
-        login_session -> Varchar,
+        username -> Text,
+        email -> Text,
+        password -> Text,
+        login_session -> Text,
+        roles -> Array<Nullable<Role>>,
     }
 }
 

@@ -74,3 +74,23 @@ pub fn logout(authen_header: &HeaderValue, pool: &web::Data<Pool>) -> Result<(),
         constants::MESSAGE_PROCESS_TOKEN_ERROR.to_string(),
     ))
 }
+
+pub fn info(authen_header: &HeaderValue, pool: &web::Data<Pool>) -> Result<User, ServiceError> {
+    if let Ok(authen_str) = authen_header.to_str() {
+        if authen_str.starts_with("Bearer") {
+            let token = authen_str[6..authen_str.len()].trim();
+            if let Ok(token_data) = token_utils::decode_token(token.to_string()) {
+                if let Ok(username) = token_utils::verify_token(&token_data, pool) {
+                    if let Ok(user) = User::find_user_by_username(&username, &mut pool.get().unwrap()) {
+                        return Ok(user);
+                    }
+                }
+            }
+        }
+    }
+
+    Err(ServiceError::new(
+        StatusCode::INTERNAL_SERVER_ERROR,
+        constants::MESSAGE_PROCESS_TOKEN_ERROR.to_string(),
+    ))
+}

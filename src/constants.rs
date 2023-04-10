@@ -1,5 +1,3 @@
-use crate::http::Method;
-
 // Messages
 pub const MESSAGE_OK: &str = "ok";
 pub const MESSAGE_CAN_NOT_FETCH_DATA: &str = "Can not fetch data";
@@ -15,6 +13,7 @@ pub const MESSAGE_LOGOUT_SUCCESS: &str = "Logout successfully";
 pub const MESSAGE_PROCESS_TOKEN_ERROR: &str = "Error while processing token";
 pub const MESSAGE_INVALID_TOKEN: &str = "Invalid token, please login again";
 pub const MESSAGE_INTERNAL_SERVER_ERROR: &str = "Internal Server Error";
+pub const MESSAGE_FORBIDDEN: &str = "Forbidden";
 
 // Bad request messages
 pub const MESSAGE_TOKEN_MISSING: &str = "Token is missing";
@@ -26,10 +25,10 @@ pub const AUTHORIZATION: &str = "Authorization";
 pub const EMPTY: &str = "";
 
 // Ignore routes
-pub const IGNORE_ROUTES: [(Method, &str); 5] = [
-    (Method::GET, "/status"),
-    (Method::GET, "/auth/signup"),
-    (Method::GET, "/auth/login"),
-    (Method::GET, "/event"),
-    (Method::GET, "/activity"),
+pub const IGNORE_ROUTES: [(crate::http::Method, &str); 5] = [
+    (crate::http::Method::GET, "/api/status"),
+    (crate::http::Method::POST, "/api/auth/signup"),
+    (crate::http::Method::POST, "/api/auth/login"),
+    (crate::http::Method::GET, "/api/event"),
+    (crate::http::Method::GET, "/api/activity"),
 ];

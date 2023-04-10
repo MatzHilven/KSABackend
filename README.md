@@ -45,7 +45,7 @@ cargo run
 - [x] Add Events API
 - [ ] Add Analytics API
 - [ ] Add Tests
-- [ ] Add User Roles
+- [x] Add User Roles
 - [ ] Add Webshop API
 - [ ] Add Forms API (registrations)
 - [ ] Add Images API

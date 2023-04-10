@@ -12,6 +12,7 @@ use futures::{
 };
 
 use crate::{config::db::Pool, constants, models::response::ResponseBody, utils::token_utils};
+use crate::models::user::User;
 
 pub struct Authentication;
 
@@ -46,14 +47,11 @@ impl<S, B> Service<ServiceRequest> for AuthenticationMiddleware<S>
     type Error = Error;
     type Future = LocalBoxFuture<'static, Result<Self::Response, Self::Error>>;
 
-    // fn poll_ready(&self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-    //     self.service.poll_ready(cx)
-    // }
-
     forward_ready!(service);
 
     fn call(&self, mut req: ServiceRequest) -> Self::Future {
         let mut authenticate_pass: bool = false;
+        let mut access_forbidden: bool = false;
 
         let headers = req.headers_mut();
         headers.append(
@@ -70,18 +68,26 @@ impl<S, B> Service<ServiceRequest> for AuthenticationMiddleware<S>
                     break;
                 }
             }
+
             if !authenticate_pass {
                 if let Some(pool) = req.app_data::<Data<Pool>>() {
                     if let Some(authen_header) = req.headers().get(constants::AUTHORIZATION) {
                         if let Ok(authen_str) = authen_header.to_str() {
-                            if authen_str.starts_with("Bearer")
-                            {
+                            if authen_str.starts_with("Bearer") {
                                 let token = authen_str[6..authen_str.len()].trim();
-                                if let Ok(token_data) = token_utils::decode_token(token.to_string())
-                                {
+                                if let Ok(token_data) = token_utils::decode_token(token.to_string()) {
                                     if token_utils::verify_token(&token_data, pool).is_ok() {
-                                        authenticate_pass = true;
-                                    } else {}
+                                        if let Ok(user) =
+                                            User::find_user_by_username(
+                                                token_data.claims.user.as_str(),
+                                                &mut pool.get().unwrap()) {
+                                            if user.can_access(&req) {
+                                                authenticate_pass = true;
+                                            } else {
+                                                access_forbidden = true;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -94,6 +100,14 @@ impl<S, B> Service<ServiceRequest> for AuthenticationMiddleware<S>
             let fut = self.service.call(req);
             Box::pin(async move {
                 fut.await.map(ServiceResponse::map_into_left_body)
+            })
+        } else if access_forbidden {
+            Box::pin(async {
+                Ok(ServiceResponse::new(req.into_parts().0, HttpResponse::Forbidden()
+                    .json(ResponseBody::new(
+                        constants::MESSAGE_FORBIDDEN,
+                        constants::EMPTY,
+                    ))).map_into_right_body())
             })
         } else {
             Box::pin(async {

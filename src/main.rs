@@ -24,7 +24,7 @@ use crate::futures::FutureExt;
 use dotenv::dotenv;
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
-mod api;
+mod controllers;
 mod config;
 mod constants;
 mod error;

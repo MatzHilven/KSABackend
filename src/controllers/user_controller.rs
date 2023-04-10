@@ -46,3 +46,21 @@ pub async fn logout(req: HttpRequest, pool: web::Data<Pool>) -> Result<HttpRespo
         )))
     }
 }
+
+// GET api/auth/info
+pub async fn info(req: HttpRequest, pool: web::Data<Pool>) -> Result<HttpResponse> {
+    if let Some(authen_header) = req.headers().get(constants::AUTHORIZATION) {
+        match user_service::info(authen_header, &pool) {
+            Ok(user) => Ok(HttpResponse::Ok().json(ResponseBody::new(
+                constants::MESSAGE_OK,
+                user,
+            ))),
+            Err(err) => Ok(err.response()),
+        }
+    } else {
+        Ok(HttpResponse::BadRequest().json(ResponseBody::new(
+            constants::MESSAGE_TOKEN_MISSING,
+            constants::EMPTY,
+        )))
+    }
+}
